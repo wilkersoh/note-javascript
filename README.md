@@ -17,6 +17,8 @@
     + [new Map](#new-map)
     + [new Set](#new-set)
   * [for of (array)](#for-of--array-)
+  * [Sort array string](#sort-array-string)
+  * [Lazy Load](#lazy-load)
 
 
 ## Pass by reference or value
@@ -60,10 +62,10 @@ const data = [
 // 2. 我們不要沒有 age 的
 const filtered = data.filter(item => {
 	/*
-		indexOf 返回 號碼 就是 說 它存在這裡面 返回 true condition 就是 我不要的
+		indexOf 返回 號碼 就是 說 它存在這裡面 返回 true condition就是說 我不要的
 	*/
 	if(item.name.indexOf(":") >= 0 || !item.age) return false; // 不要的 
-	return true // 要的
+	return true // 要留下來的
 })
 
 ```
@@ -374,6 +376,7 @@ let john = {name: 'John Doe'},
     peter = {name: 'Peter Drucker'};
 
 // 我們可以把 obj 當成key 來set
+let userRoles = new Map();
 userRoles.set(john, 'admin');
 userRoles.set(lily, 'editor');
 userRoles.set(peter, 'subscriber');
@@ -470,4 +473,78 @@ const array1 = ['a', 'b', 'c'];
 for (const element of array1) {
   console.log(element);
 }
+```
+
+## Sort array string
+
+```jsx
+// descending order
+animals.sort(function (a, b) {
+    if (a > b) {
+        return -1;
+    }
+    if (b > a) {
+        return 1;
+    }
+    return 0;
+});
+console.log(animals);
+// ["elephant", "dog", "cat", "bee", "ant"]
+```
+
+## Lazy Load
+
+```jsx
+class MyClass {	
+	get countryLists() {
+	    var data = expensive();
+	    Object.defineProperties(this, "countryLists", {
+	      value: data,
+	      writeable: false,
+	      configurable: false,
+	      enumerable: false,
+	    });
+	    return data;
+  }
+}
+
+const obj = new MyClass();
+
+console.time("first call");
+obj.countryLists;
+console.timeEnd("first call")
+
+console.time("second call");
+obj.countryLists;
+console.timeEnd("second call")
+```
+
+don't do this way
+
+```jsx
+class MyClass {
+	contrictor() {
+		this.data = expensive();
+	}
+}
+```
+
+```jsx
+function User(name, birthday) {
+  this.name = name;
+  this.birthday = birthday;
+
+  // age is calculated from the current date and birthday
+  Object.defineProperty(this, "age", {
+    get() {
+      let todayYear = new Date().getFullYear();
+      return todayYear - this.birthday.getFullYear();
+    }
+  });
+}
+
+let john = new User("John", new Date(1992, 6, 1));
+
+alert( john.birthday ); // birthday is available
+alert( john.age );      // ...as well as the age
 ```
