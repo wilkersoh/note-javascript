@@ -1,6 +1,7 @@
   * [Pass by reference or value](#pass-by-reference-or-value)
   * [Anchor tag](#anchor-tag)
   * [Filter](#filter)
+    + [advance filter](#advance-filter)
   * [console with color](#console-with-color)
   * [Logical Assignmnet Operators](#logical-assignmnet-operators)
   * [Numberic Seperators](#numberic-seperators)
@@ -19,6 +20,9 @@
   * [for of (array)](#for-of--array-)
   * [Sort array string](#sort-array-string)
   * [Lazy Load](#lazy-load)
+  * [Sleep](#sleep)
+  * [await in for loop](#await-in-for-loop)
+  * [require.context](#requirecontext)
 
 
 ## Pass by reference or value
@@ -68,6 +72,22 @@ const filtered = data.filter(item => {
 	return true // 要留下來的
 })
 
+```
+
+### advance filter
+
+```jsx
+const powerfulCharacters = ["Satoru gojo", "Levi ackerman", "Saitama", "seno ga", "Goku"];
+
+const filters = {
+  smallerThanTen: (item) => item.length < 10,
+  startsWithS: (item) => item.startsWith('S'),
+}
+
+const selected = [filters.smallerThanTen, filters.startsWithS];
+
+const result = powerfulCharacters.filter(item => selected.every(fn => fn(item)));
+console.log(result) // ["Saitama"]
 ```
 
 ## console with color
@@ -547,4 +567,50 @@ let john = new User("John", new Date(1992, 6, 1));
 
 alert( john.birthday ); // birthday is available
 alert( john.age );      // ...as well as the age
+```
+
+## Sleep
+
+```jsx
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// use
+await sleep(1000)
+sleep(1000).then(v => functionName(value))
+```
+
+## await in for loop
+
+```jsx
+const fruitsToGet = ['apple', 'grape', 'pear'];
+
+const getNumFruit = fruit => {
+  return fruitBasket[fruit]
+}
+
+const forLoop = async _ => {
+  console.log('Start')
+
+  for (let index = 0; index < fruitsToGet.length; index++) {
+    // Get num of each fruit
+		const fruit = fruitsToGet[index]
+    const numFruit = await getNumFruit(fruit)
+    console.log(numFruit)
+  }
+
+  console.log('End')
+}
+```
+
+## require.context
+
+這個是 一個 `webpack`的 功能，可以使用在 `runtime` nodejs裡
+
+```jsx
+export const getStaticProps: GetStaticProps = async () => {
+	// get all .mdx file below articles folder (nested)
+  const paths = require.context("../articles", true, /\.mdx$/);
+}
 ```
